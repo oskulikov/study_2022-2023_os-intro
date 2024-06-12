@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Проверка наличия аргумента командной строки
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <length>"
+    exit 1
+fi
+
+length=$1
+
+# Генерация случайной буквы
+generate_random_letter() {
+    local letter
+    letter=$((RANDOM % 26 + 65))  # A-Z
+    printf "\\$(printf '%03o' "$letter")"
+}
+
+# Генерация случайной последовательности букв
+for (( i=0; i<$length; i++ )); do
+    generate_random_letter
+done
+echo
