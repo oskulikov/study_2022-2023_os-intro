@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <math.h>
+#include "calculate.h"
+
+int main() {
+    double num1, num2, result;
+    char op;
+
+    printf("Введите первое число: ");
+    scanf("%lf", &num1);
+    
+    printf("Введите операцию (+, -, *, /, ^, s (sqrt), S (sin), C (cos), T (tan)): ");
+    scanf(" %c", &op);
+    
+    if (op == 's') {
+        result = square_root(num1);
+    } else if (op == 'S') {
+        result = sine(num1);
+    } else if (op == 'C') {
+        result = cosine(num1);
+    } else if (op == 'T') {
+        result = tangent(num1);
+    } else {
+        printf("Введите второе число: ");
+        scanf("%lf", &num2);
+        
+        switch (op) {
+            case '+':
+                result = add(num1, num2);
+                break;
+            case '-':
+                result = subtract(num1, num2);
+                break;
+            case '*':
+                result = multiply(num1, num2);
+                break;
+            case '/':
+                result = divide(num1, num2);
+                break;
+            case '^':
+                result = power(num1, num2);
+                break;
+            default:
+                printf("Неверная операция.\n");
+                return 1;
+        }
+    }
+
+    printf("Результат: %lf\n", result);
+    return 0;
+}
