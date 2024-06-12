@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Функция для вывода помощи
+usage() {
+    echo "Usage: $0 <semaphore_file> <wait_time> <use_time>"
+    exit 1
+}
+
+# Проверка аргументов
+if [ $# -ne 3 ]; then
+    usage
+fi
+
+semaphore_file=$1
+wait_time=$2
+use_time=$3
+
+# Проверка наличия файла семафора
+while [ -e "$semaphore_file" ]; do
+    echo "[$(date)] Ресурс занят, жду..."
+    sleep $wait_time
+done
+
+# Создание файла семафора для захвата ресурса
+touch "$semaphore_file"
+echo "[$(date)] Ресурс захвачен, использую ресурс..."
+
+# Использование ресурса
+sleep $use_time
+
+# Освобождение ресурса
+rm -f "$semaphore_file"
+echo "[$(date)] Ресурс освобожден."
