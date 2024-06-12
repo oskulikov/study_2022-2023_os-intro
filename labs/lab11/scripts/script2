@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Проверка наличия аргумента командной строки
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <command>"
+    exit 1
+fi
+
+command=$1
+manpath="/usr/share/man/man1"
+manfile="$manpath/${command}.1.gz"
+
+# Проверка существования файла справки
+if [ -f "$manfile" ]; then
+    # Разархивирование и отображение содержимого файла справки
+    zcat "$manfile" | less
+else
+    echo "No manual entry for $command"
+    exit 1
+fi
