@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Проверяем, были ли переданы два аргумента
+if [ $# -ne 2 ]; then
+    echo "Использование: $0 <формат файла> <путь к директории>"
+    exit 1
+fi
+
+# Присваиваем аргументы переменным
+file_format=$1
+target_dir=$2
+
+# Проверяем, существует ли каталог
+if [ ! -d "$target_dir" ]; then
+    echo "Ошибка: Каталог '$target_dir' не существует."
+    exit 1
+fi
+
+# Инициализируем счетчик
+file_count=0
+
+# Подсчитываем количество файлов указанного формата
+for format in $file_format; do
+    count=$(find "$target_dir" -type f -name "*$format" | wc -l)
+    file_count=$((file_count + count))
+done
+
+# Выводим результат
+echo "Количество файлов с форматами '$file_format' в каталоге '$target_dir': $file_count"
