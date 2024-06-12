@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Инициализация переменных
+inputfile=""
+outputfile=""
+pattern=""
+case_sensitive=false
+line_numbers=false
+
+# Функция для вывода помощи
+usage() {
+    echo "Использование: $0 [-i inputfile] [-o outputfile] [-p pattern] [-C] [-n]"
+    echo "  -i inputfile   : Прочитать данные из указанного файла"
+    echo "  -o outputfile  : Вывести данные в указанный файл"
+    echo "  -p pattern     : Указать шаблон для поиска"
+    echo "  -C             : Различать большие и малые буквы"
+    echo "  -n             : Выдавать номера строк"
+    exit 1
+}
+
+# Анализ аргументов командной строки
+while getopts "i:o:p:Cn" opt; do
+    case $opt in
+        i) inputfile=$OPTARG ;;
+        o) outputfile=$OPTARG ;;
+        p) pattern=$OPTARG ;;
+        C) case_sensitive=true ;;
+        n) line_numbers=true ;;
+        *) usage ;;
+    esac
+done
+
+# Проверка обязательных аргументов
+if [ -z "$inputfile" ] || [ -z "$pattern" ]; then
+    usage
+fi
+
+# Построение команды grep
+grep_command="grep"
+
+if [ "$case_sensitive" = false ]; then
+    grep_command+=" -i"
+fi
+
+if [ "$line_numbers" = true ]; then
+    grep_command+=" -n"
+fi
+
+grep_command+=" -e \"$pattern\" \"$inputfile\""
+
+# Выполнение команды grep и сохранение результата
+if [ -z "$outputfile" ]; then
+    eval $grep_command
+else
+    eval $grep_command > "$outputfile"
+fi
